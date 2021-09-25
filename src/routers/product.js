@@ -46,11 +46,34 @@ router.post("/", async (req, res) => {
     }
 
 })
+router.patch('/:productId', async (req, res) => {
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ['price', 'stock'];
+    const isValidUpdate = updates.every(update => allowedUpdates.includes(update))
 
+    if (!isValidUpdate) {
+        return res.status(400).send({ err: "Invalid update" });
+    }
+    try {
+        const product = await Product.findByIdAndUpdate(req.params.productId, req.body, {
+            new: true,
+            runValidators: true
+        })
+        console.log(product);
+        if (!product) {
+            return res.status(400).send({ error: "product not found in database" })
+        }
+        res.send(product)
+    }
+    catch (e) {
+        res.status(400).send(e.message)
+    }
+})
 /*
 TODO:
         * ADD route for updating product
         * Add route for Deleting product
+        * ADD ROUTE for searching for a product by  name
 
 
 

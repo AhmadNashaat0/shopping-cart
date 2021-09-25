@@ -81,8 +81,8 @@ userSchema.methods.makeToken = function () {
 
 // static functions
 userSchema.statics.login = async function(email, password){
-    //const user = await User.findOne({ $or : [{username:email},{email:email.lowercase}]});
-    const user = await User.findOne({email:email.lowercase});
+    const user = await User.findOne({ $or : [{username:email},{email:email.toLowerCase()}]});
+    //const user = await User.findOne({email:email.toLowerCase()});
     if (!user) {
         throw new Error('email is invalid');
     }
@@ -101,4 +101,5 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
-module.exports =  mongoose.model('Users', userSchema);
+const User = mongoose.model('Users', userSchema);
+module.exports =  User;

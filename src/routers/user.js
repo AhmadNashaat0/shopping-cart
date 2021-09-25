@@ -4,7 +4,6 @@ const User = require('../models/user');
 
 
 router.get('/:me',(req,res)=>{
-
     res.send('hi');
 });
 

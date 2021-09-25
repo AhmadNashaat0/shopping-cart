@@ -2,12 +2,14 @@ const express = require('express');
 const app = express();
 require('./db/db');
 const userRouter = require('./routers/user');
+const productRouter = require('./routers/product');
 
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use('/user',userRouter);
+app.use('/user', userRouter);
+app.use('/products', productRouter)
 
-app.listen(port, ()=>{
+app.listen(port, () => {
     console.log('server working');
 })

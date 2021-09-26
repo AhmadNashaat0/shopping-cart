@@ -52,8 +52,31 @@ router.post('logoutAll', auth, async (req, res) => {
     } catch (e) {
         res.status(500).send();
     }
+});
+
+router.patch('/me' ,auth ,async (req,res)=>{
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ['name', 'email', 'password', 'age'];
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+    try{
+        if (!isValidOperation) {
+            throw new Error('not allowed to be changed');
+        }
+        updates.forEach((update) => req.user[update] = req.body[update]);
+        await req.user.save();
+        res.send('updated');
+    }catch(e){
+        res.status(400).send(e);
+    }
+});
+
+router.delete('/me', auth, async(req, res) => {
+    try {
+        await req.user.remove()
+        res.send(req.user)
+    } catch (e) {
+        res.status(500).send()
+    }
 })
-
-
 
 module.exports = router;

@@ -69,9 +69,21 @@ router.patch('/:productId', async (req, res) => {
         res.status(400).send(e.message)
     }
 })
+
+router.delete("/:productId", async (req, res) => {
+    try {
+        const product = await Product.findByIdAndDelete(req.params.productId);
+        if (!product)
+            res.status(404).send({ err: `can't find product with id ${req.params.productId}` });
+        res.send(product)
+    }
+    catch (e) {
+        res.status(500).send({ error: e.message })
+    }
+})
 /*
 TODO:
-        * ADD route for updating product
+        * 
         * Add route for Deleting product
         * ADD ROUTE for searching for a product by  name
 

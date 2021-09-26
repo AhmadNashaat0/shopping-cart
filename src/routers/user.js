@@ -16,7 +16,7 @@ router.post('/register', async(req,res)=>{
         res.cookie('token',token);
         res.status(201).send('added');
     }catch(e){
-        res.status(400).send(e);
+        res.status(400).send(e.message);
     }
 });
 
@@ -38,9 +38,9 @@ router.post('/users/logout', auth, async (req, res) => {
             return token.token !== req.cookies.token;
         });
         await req.user.save();
-        res.send();
+        res.send('loggedOut');
     } catch (e) {
-        res.status(500).send();
+        res.status(500).send(e.message);
     }
 });
 
@@ -48,9 +48,9 @@ router.post('logoutAll', auth, async (req, res) => {
     try {
         req.user.tokens = [];
         await req.user.save();
-        res.send();
+        res.send('loggedAllOut');
     } catch (e) {
-        res.status(500).send();
+        res.status(500).send(e.message);
     }
 });
 
@@ -66,7 +66,7 @@ router.patch('/me' ,auth ,async (req,res)=>{
         await req.user.save();
         res.send('updated');
     }catch(e){
-        res.status(400).send(e);
+        res.status(400).send(e.message);
     }
 });
 

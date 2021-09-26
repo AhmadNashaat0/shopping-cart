@@ -9,25 +9,28 @@ const userSchema  = new mongoose.Schema({
         first:{
             type: String,
             required: true,
-            trim: true
+            trim: true,
+            maxLength: 15
         },last:{
             type: String,
             required: true,
-            trim: true
+            trim: true,
+            maxLength: 15
         }
     },
     username:{
         type: String,
         required: true,
-        unique: true,
         trim: true,
-        minLength: 8
+        unique: [true,'username is already taken'],
+        minLength: 8,
+        maxLength: 25
     },
     email:{
         type: String,
         required: true,
         trim: true,
-        unique:true,
+        unique:[true,'email is already taken'],
         lowercase: true,
         validate(value) {
             if (!validator.isEmail(value)) {
@@ -65,25 +68,36 @@ const userSchema  = new mongoose.Schema({
             type: String,
             required: true
         }
+    }],
+    cart: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Product',
     }]
 },{
    timestamps: true 
 });
+
 
 // virtuals
 userSchema.virtual('fullName').get(function(){
     return this.name.first + ' ' + this.name.last;
 });
 
+
 // methods
 userSchema.methods.makeToken = function () {
-    const token = jwt.sign({ 
-        _id: this._id.toString(),
-        admin:this.admin
-    }, process.env.JWT_SECRET);
+    const token = jwt.sign({_id: this._id.toString()}, process.env.JWT_SECRET);
     this.tokens = this.tokens.concat({ token });
     return token;
 };
+
+userSchema.pre('save', async function (next) {
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 8);
+    }
+    next();
+});
+
 
 // static functions
 userSchema.statics.login = async function({email, password}){
@@ -104,12 +118,6 @@ userSchema.statics.login = async function({email, password}){
     return user;
 };
 
-userSchema.pre('save', async function (next) {
-    if (this.isModified('password')) {
-        this.password = await bcrypt.hash(this.password, 8);
-    }
-    next();
-});
 
 const User = mongoose.model('Users', userSchema);
 module.exports =  User;

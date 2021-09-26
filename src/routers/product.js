@@ -69,6 +69,15 @@ router.patch('/:productId', async (req, res) => {
         res.status(400).send(e.message)
     }
 })
+
+router.delete("/:productId", async (req, res) => {
+    try {
+
+    }
+    catch (e) {
+
+    }
+})
 /*
 TODO:
         * ADD route for updating product

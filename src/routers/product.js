@@ -74,23 +74,22 @@ router.delete("/:productId", async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.productId);
         if (!product)
-            res.status(404).send({ err: `can't find product with id ${req.params.productId}` });
+            return res.status(404).send({ err: `can't find product with id ${req.params.productId}` });
         res.send(product)
     }
     catch (e) {
         res.status(500).send({ error: e.message })
     }
 })
-/*
-TODO:
-        * 
-        * Add route for Deleting product
-        * ADD ROUTE for searching for a product by  name
-
-
-
-
-*/
+router.post("/search", async (req, res) => {
+    /**
+     * TODO:
+     * PAGINATION TO SEARCH RESULT
+     */
+    const query = req.body.name;
+    const products = await Product.find({ name: { $regex: `${query}` } })
+    res.send(products)
+})
 
 
 

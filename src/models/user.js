@@ -21,6 +21,7 @@ const userSchema  = new mongoose.Schema({
         required: true,
         unique: true,
         trim: true,
+        minLength: 8
     },
     email:{
         type: String,
@@ -48,6 +49,7 @@ const userSchema  = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
+        default: 0,
         validate(value){
             if(value<0){
                 throw new Error('age is invalid') ;
@@ -56,6 +58,7 @@ const userSchema  = new mongoose.Schema({
     },
     admin:{
         type: Boolean,
+        default: false
     },
     tokens: [{
         token:{
@@ -74,22 +77,29 @@ userSchema.virtual('fullName').get(function(){
 
 // methods
 userSchema.methods.makeToken = function () {
-    const token = jwt.sign({ _id: this._id.toString(),admin:this.admin}, process.env.JWT_SECRET);
+    const token = jwt.sign({ 
+        _id: this._id.toString(),
+        admin:this.admin
+    }, process.env.JWT_SECRET);
     this.tokens = this.tokens.concat({ token });
     return token;
 };
 
 // static functions
-userSchema.statics.login = async function(email, password){
-    const user = await User.findOne({ $or : [{username:email},{email:email.toLowerCase()}]});
-    //const user = await User.findOne({email:email.toLowerCase()});
+userSchema.statics.login = async function({email, password}){
+    const user = await User.findOne({ 
+        $or: [
+            {username:email},
+            {email:email.toLowerCase()}
+        ]
+    });
     if (!user) {
-        throw new Error('email is invalid');
+        throw new Error('invalid email.');
     }
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-        throw new Error('worng password');
+        throw new Error('worng password.');
     }
     return user;
 };

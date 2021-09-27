@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -8,29 +9,29 @@ const userSchema  = new mongoose.Schema({
     name:{
         first:{
             type: String,
-            required: true,
+            required: [true, "First name is required"],
             trim: true,
             maxLength: 15
         },last:{
             type: String,
-            required: true,
+            required: [true, "Last name is required"],
             trim: true,
             maxLength: 15
         }
     },
     username:{
         type: String,
-        required: true,
+        required: [true, "Username is required"],
         trim: true,
-        unique: [true,'username is already taken'],
+        unique: true,
         minLength: 8,
         maxLength: 25
     },
     email:{
         type: String,
-        required: true,
+        required: [true, "Email is required"],
         trim: true,
-        unique:[true,'email is already taken'],
+        unique:true,
         lowercase: true,
         validate(value) {
             if (!validator.isEmail(value)) {
@@ -40,7 +41,7 @@ const userSchema  = new mongoose.Schema({
     },
     password:{
         type: String,
-        required: true,
+        required: [true, "Email is required"],
         trim: true,
         validate(value) {
             if (validator.isStrongPassword(value)>=30) {
@@ -50,7 +51,7 @@ const userSchema  = new mongoose.Schema({
     },
     age:{
         type: String,
-        required: true,
+        required: [true, "Age is required"],
         trim: true,
         default: 0,
         validate(value){
@@ -77,6 +78,8 @@ const userSchema  = new mongoose.Schema({
    timestamps: true 
 });
 
+// plugins
+userSchema.plugin(uniqueValidator, { message: 'expected {PATH} to be unique.' });
 
 // virtuals
 userSchema.virtual('fullName').get(function(){

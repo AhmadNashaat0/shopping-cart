@@ -1,5 +1,3 @@
-// name, id, desc, no., price
-
 const mongoose = require('mongoose');
 const validator = require('validator')
 

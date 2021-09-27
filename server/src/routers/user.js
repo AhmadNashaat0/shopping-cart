@@ -32,7 +32,7 @@ router.post('/login', async(req,res)=>{
     }
 });
 
-router.post('/users/logout', auth, async (req, res) => {
+router.post('/logout', auth, async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter((token) => {
             return token.token !== req.cookies.token;
@@ -44,7 +44,7 @@ router.post('/users/logout', auth, async (req, res) => {
     }
 });
 
-router.post('logoutAll', auth, async (req, res) => {
+router.post('/logoutAll', auth, async (req, res) => {
     try {
         req.user.tokens = [];
         await req.user.save();
@@ -72,10 +72,10 @@ router.patch('/me' ,auth ,async (req,res)=>{
 
 router.delete('/me', auth, async(req, res) => {
     try {
-        await req.user.remove()
-        res.send(req.user)
+        await req.user.remove();
+        res.send('deleted');
     } catch (e) {
-        res.status(500).send()
+        res.status(500).send(e.message);
     }
 })
 

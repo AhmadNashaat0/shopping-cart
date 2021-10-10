@@ -6,10 +6,10 @@ const CartCard = ({ name, deleteMe, count }) => {
   const [totalPrice, setTotalPrice] = useState(name.count * 150);
 
   const update = (num) => {
-    if (counter + num < 1) return deleteMe(name[0]);
+    if (counter + num < 1) return deleteMe(name.id);
     setCounter(counter + num);
     setTotalPrice(totalPrice + num * 150);
-    count(name.id, counter);
+    count(name.id, counter + num);
   };
 
   return (

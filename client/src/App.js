@@ -1,11 +1,13 @@
 import React from "react";
-import Cart from "./screens/Cart";
+// import Cart from "./screens/Cart";
+import Product from "./screens/Product";
 import "./App.css";
+
 
 const App = () => {
   return (
     <div>
-      <Cart />
+      <Product></Product>
     </div>
   );
 };

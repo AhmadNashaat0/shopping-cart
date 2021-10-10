@@ -1,23 +1,23 @@
 import React from "react";
 import { useState } from "react";
 
-const CartCard = ({ name, deleteMe, count }) => {
-  const [counter, setCounter] = useState(name.count);
-  const [totalPrice, setTotalPrice] = useState(name.count * 150);
+const CartCard = ({ product, deleteMe, count }) => {
+  const [counter, setCounter] = useState(product.count);
+  const [totalPrice, setTotalPrice] = useState(product.count * product.price);
 
   const update = (num) => {
-    if (counter + num < 1) return deleteMe(name.id);
+    if (counter + num < 1) return deleteMe(product.id);
     setCounter(counter + num);
-    setTotalPrice(totalPrice + num * 150);
-    count(name.id, counter + num);
+    setTotalPrice(totalPrice + num * product.price);
+    count(product.id, counter + num);
   };
 
   return (
     <div className="cartCard">
       <div className="imgCard"></div>
       <div className="cardDesc">
-        <h1>{name.id}</h1>
-        <p>description</p>
+        <h1>{product.id}</h1>
+        <p>{product.price}</p>
       </div>
       <div className="cardControl">
         <div className="cardControlCounter">

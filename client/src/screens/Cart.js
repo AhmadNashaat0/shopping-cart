@@ -4,32 +4,31 @@ import CartCard from "../components/CartCard";
 const Cart = () => {
   const [totalPrice, setTotalPrices] = useState(0);
   const [cards, setcards] = useState([
-    { id: 1, count: 1 },
-    { id: 2, count: 1 },
-    { id: 3, count: 3 },
-    { id: 4, count: 1 },
-    { id: 5, count: 1 },
-    { id: 6, count: 1 },
+    { id: 1, count: 1, price: 120 },
+    { id: 2, count: 1, price: 130 },
+    { id: 3, count: 3, price: 200 },
+    { id: 4, count: 1, price: 90 },
+    { id: 5, count: 2, price: 100 },
+    { id: 6, count: 1, price: 150 },
   ]);
 
   useEffect(() => {
-    var price = 0;
-    cards.forEach((card) => {
-      price += 150 * card.count;
+    var prices = 0;
+    cards.forEach(({ count, price }) => {
+      prices += price * count;
     });
-    setTotalPrices(price);
+    setTotalPrices(prices);
   });
 
   const deleteMe = (i) => {
-    const newCards = cards.filter((card) => card.id !== i);
+    const newCards = cards.filter(({ id }) => id !== i);
     setcards(newCards);
   };
   const count = (i, c) => {
-    const card = cards.findIndex((e) => e.id === i);
+    const card = cards.findIndex(({ id }) => id === i);
     let newCards = [...cards];
     newCards[card].count = c;
     setcards(newCards);
-    console.log(cards);
   };
 
   return (
@@ -37,10 +36,9 @@ const Cart = () => {
       {cards.map((card) => (
         <CartCard
           key={card.id}
-          name={card}
+          product={card}
           deleteMe={deleteMe}
           count={count}
-          setTotalPrices={setTotalPrices}
         />
       ))}
       <h2>total price : </h2>

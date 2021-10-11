@@ -1,5 +1,5 @@
 import React from "react";
-import ProductCard from "../components/ProductCard";
+import HomeProduct from "../components/HomeProduct";
 
 const Home = () => {
     return (
@@ -8,6 +8,10 @@ const Home = () => {
             <div className="home">
                 <h1>Products</h1>
                 <div className="home-products">
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
+                    <HomeProduct></HomeProduct>
 
                 </div>
             </div>

@@ -4,7 +4,9 @@ import React from "react";
 const ProductCard = () => {
     return (
         <div className="productCard">
-            <div className="productImage"></div>
+            <div className="productImage">
+                <img></img>
+            </div>
             <div className="productData">
                 <h1 className="productTitle">ProductName</h1>
                 <p className="productDescription">

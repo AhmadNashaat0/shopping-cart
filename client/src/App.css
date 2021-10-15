@@ -1,0 +1,63 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cartCard {
+  display: flex;
+  margin: 12px;
+  width: 720px;
+  height: 180px;
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.imgCard {
+  min-width: 180px;
+  background-color: #8a4646;
+}
+
+.cardDesc {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  background-color: cornflowerblue;
+}
+
+.cardControl {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+}
+span {
+  font-size: 18px;
+}
+.cardControlCounter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.cardControlCounter input,
+.cardControlCounter button {
+  width: 30px;
+  height: 25px;
+}

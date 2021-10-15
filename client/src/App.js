@@ -1,6 +1,6 @@
 import React from "react";
-import Cart from "./screens/Cart";
-import Product from "./screens/Product";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Cart, Login, Register, Sandbox } from "./screens/index.js";
 import "./App.css";
 import Home from "./screens/Home";
 
@@ -8,9 +8,25 @@ import Home from "./screens/Home";
 const App = () => {
   return (
     <div>
-      {/* <Product></Product> */}
-      {/* <Cart></Cart> */}
-      <Home></Home>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/cart">
+            <Cart />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/Register">
+            <Register />
+          </Route>
+          <Route path="/sandbox">
+            <Sandbox />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 };

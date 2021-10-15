@@ -1,0 +1,18 @@
+.login,
+.register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  border-radius: 16px;
+  padding: 62px 52px 62px;
+  border: 1px solid rgb(231, 231, 231);
+  color: #2e2e2e;
+}

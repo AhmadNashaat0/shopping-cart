@@ -12,6 +12,7 @@ const Cart = () => {
     { id: 6, count: 1, price: 150 },
   ]);
 
+  // eslint-disable-next-line
   useEffect(() => {
     var prices = 0;
     cards.forEach(({ count, price }) => {
@@ -24,11 +25,13 @@ const Cart = () => {
     const newCards = cards.filter(({ id }) => id !== i);
     setcards(newCards);
   };
-  const count = (i, c) => {
+
+  const count = (i, count) => {
     const card = cards.findIndex(({ id }) => id === i);
     let newCards = [...cards];
-    newCards[card].count = c;
+    newCards[card].count = count;
     setcards(newCards);
+    //setcards((cards)=>{cards.map()})
   };
 
   return (

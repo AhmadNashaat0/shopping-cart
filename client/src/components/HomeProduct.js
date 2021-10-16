@@ -1,14 +1,14 @@
 import React from "react";
 
-const HomeProduct = () => {
+const HomeProduct = ({ title, price }) => {
     return (
         <div className="home-product">
             <div className="productImage">
                 <img></img>
             </div>
             <div className="productData">
-                <h1 className="productTitle">ProductName</h1>
-                <p className="productPrice"> price: <span>100$</span></p>
+                <h1 className="productTitle">{title}</h1>
+                <p className="productPrice"> price: <span>{price}</span></p>
                 <button className="AddToCart">View</button>
 
             </div>

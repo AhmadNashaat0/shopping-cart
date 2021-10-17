@@ -1,14 +1,23 @@
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import React, { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 
-const Field = ({ name, label, value, onChange, size = "normal", type }) => {
+const Field = ({
+  name,
+  label,
+  value,
+  onChange,
+  size = "normal",
+  type,
+  required = false,
+}) => {
   return (
     <TextField
       fullWidth
+      required={required}
       type={type}
       name={name}
       label={label ? label : name}

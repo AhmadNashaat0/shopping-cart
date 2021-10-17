@@ -1,42 +1,84 @@
-import { useState } from "react";
+import React, { useState } from "react";
+// eslint-disable-next-line
 import { Redirect, useHistory, Link } from "react-router-dom";
-//import "../styles/register.css";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Field, PassField } from "../components/Fields";
+import * as yup from "yup";
 
 const Register = () => {
   const history = useHistory();
   const [register, setRegister] = useState({
+    name: { first: "", last: "" },
+    username: "",
     email: "",
     password: "",
-    username: "",
     age: "",
     gender: "",
-    name: { first: "", last: "" },
   });
 
+  const validate = (value) => {
+    Object.keys(value).forEach((key) => value[key] === "" && delete value[key]);
+    console.log(value);
+    const schema = yup.object().shape({
+      name: yup.object().shape({
+        first: yup
+          .string()
+          .required("First Name is Required.")
+          .min(2, "Username should be 8 chars minimum."),
+        last: yup
+          .string()
+          .required("Last Name is Required.")
+          .min(2, "Username should be 8 chars minimum."),
+      }),
+      username: yup
+        .string()
+        .required("First Name is Required.")
+        .trim()
+        .matches(/^\S*$/, "Username can not have space")
+        .min(8, "Username should be 8 chars minimum.")
+        .max(20, "Username should be 20 chars maximum."),
+      password: yup
+        .string()
+        .required("No password provided.")
+        .min(8, "Password is too short - should be 8 chars minimum.")
+        .matches(
+          /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+          "Password must contain at least one uppercase letter, lowercase letter and number."
+        ),
+      email: yup
+        .string()
+        .email("Must be a valid email")
+        .required("Email is Required."),
+      age: yup.number().required("Age is required.").positive().integer(),
+      gander: yup.mixed().oneOf(["male", "female"], "Gender is required."),
+    });
+    return schema.validate(value);
+  };
   const handleChange = (key) => (e) => {
-    if (key === "first" || key === "last")
+    if (["first", "last"].includes(key))
       setRegister({
         ...register,
         name: { ...register.name, [key]: e.target.value },
       });
     else setRegister({ ...register, [key]: e.target.value });
   };
-  const submit = async (action) => {
+  const submit = (action) => {
     if (action === "cancel") return history.push("/");
-    const url = "http://127.0.0.1:3000/user/register";
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(register),
-    };
-    const res = await fetch(url, requestOptions);
-    const data = await res.json();
-    console.log(data);
+    validate(register)
+      // .then((value) => {
+      //   return fetch("http://127.0.0.1:3000/user/register", {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify(value),
+      //   });
+      // })
+      // .then((data) => console.log(data))
+      .catch((err) => {
+        console.log(err.errors[0]);
+      });
   };
 
   return (
@@ -49,6 +91,7 @@ const Register = () => {
           alignItems="center"
         >
           <Field
+            required={true}
             name="first"
             value={register.name}
             onChange={handleChange("first")}

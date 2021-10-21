@@ -6,19 +6,17 @@ const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
-      first: {
-        type: String,
-        required: [true, "First name is required"],
-        trim: true,
-        maxLength: 15,
-      },
-      last: {
-        type: String,
-        required: [true, "Last name is required"],
-        trim: true,
-        maxLength: 15,
-      },
+    firstName: {
+      type: String,
+      required: [true, "First name is required"],
+      trim: true,
+      maxLength: 15,
+    },
+    lastName: {
+      type: String,
+      required: [true, "Last name is required"],
+      trim: true,
+      maxLength: 15,
     },
     username: {
       type: String,
@@ -98,7 +96,7 @@ userSchema.plugin(uniqueValidator, {
 // virtuals
 userSchema.virtual("fullName").get(function () {
   const user = this;
-  return user.name.first + " " + user.name.last;
+  return user.firstName + " " + user.lastName;
 });
 
 // methods

@@ -4,14 +4,17 @@ import { Redirect, useHistory, Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import Alert from "@mui/material/Alert";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Field, PassField } from "../components/Fields";
 import * as yup from "yup";
 
 const Register = () => {
   const history = useHistory();
+  const [error, setError] = useState("");
   const [register, setRegister] = useState({
-    name: { first: "", last: "" },
+    firstName: "",
+    lastName: "",
     username: "",
     email: "",
     password: "",
@@ -20,19 +23,16 @@ const Register = () => {
   });
 
   const validate = (value) => {
-    Object.keys(value).forEach((key) => value[key] === "" && delete value[key]);
-    console.log(value);
     const schema = yup.object().shape({
-      name: yup.object().shape({
-        first: yup
-          .string()
-          .required("First Name is Required.")
-          .min(2, "Username should be 8 chars minimum."),
-        last: yup
-          .string()
-          .required("Last Name is Required.")
-          .min(2, "Username should be 8 chars minimum."),
-      }),
+      firstName: yup
+        .string()
+        .required("First Name is Required.")
+        .min(2, "Username should be 8 chars minimum."),
+      lastName: yup
+        .string()
+        .required("Last Name is Required.")
+        .min(2, "Username should be 8 chars minimum."),
+
       username: yup
         .string()
         .required("First Name is Required.")
@@ -58,55 +58,60 @@ const Register = () => {
     return schema.validate(value);
   };
   const handleChange = (key) => (e) => {
-    if (["first", "last"].includes(key))
-      setRegister({
-        ...register,
-        name: { ...register.name, [key]: e.target.value },
-      });
-    else setRegister({ ...register, [key]: e.target.value });
+    setRegister({ ...register, [key]: e.target.value });
   };
-  const submit = (action) => {
+  const submit = (action) => (e) => {
+    e.preventDefault();
+    setError("");
     if (action === "cancel") return history.push("/");
     validate(register)
-      // .then((value) => {
-      //   return fetch("http://127.0.0.1:3000/user/register", {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify(value),
-      //   });
-      // })
-      // .then((data) => console.log(data))
+      .then((value) => {
+        return fetch("http://127.0.0.1:3000/user/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(value),
+        });
+      })
+      .then((data) => console.log(data))
       .catch((err) => {
-        console.log(err.errors[0]);
+        setError(err.errors[0]);
       });
   };
 
   return (
     <div className="register">
-      <form>
+      <form onSubmit={submit("")}>
+        {error && (
+          <Alert variant="outlined" severity="error" sx={{ mb: "5px" }}>
+            {error}
+          </Alert>
+        )}
         <h1>register</h1>
         <Stack
           spacing={{ xs: 0.5, sm: 2 }}
           direction={{ xs: "column", sm: "row" }}
           alignItems="center"
+          mt={2}
         >
           <Field
             required={true}
-            name="first"
-            value={register.name}
-            onChange={handleChange("first")}
+            name="firstName"
+            value={register}
+            onChange={handleChange("firstName")}
             label="first name"
             size="small"
           />
           <Field
-            name="last"
-            value={register.name}
-            onChange={handleChange("last")}
+            required={true}
+            name="lastName"
+            value={register}
+            onChange={handleChange("lastName")}
             label="last name"
             size="small"
           />
         </Stack>
         <Field
+          required={true}
           name="username"
           value={register}
           onChange={handleChange("username")}
@@ -118,6 +123,7 @@ const Register = () => {
           alignItems="center"
         >
           <Field
+            required={true}
             name="age"
             type="number"
             value={register}
@@ -130,26 +136,30 @@ const Register = () => {
             fullWidth
             size="small"
             options={["male", "female", ""]}
-            renderInput={(params) => <TextField {...params} label="gender" />}
+            renderInput={(params) => (
+              <TextField {...params} required label="gender" />
+            )}
           />
         </Stack>
         <Field
+          required={true}
           name="email"
           value={register}
           onChange={handleChange("email")}
           size="small"
         />
         <PassField
+          required={true}
           value={register}
           onChange={handleChange("password")}
           size="small"
         />
         <Stack spacing={2} direction="row" mt={2}>
           <Button
+            type="submit"
             size="large"
             variant="contained"
             fullWidth={true}
-            onClick={submit}
           >
             sign up
           </Button>
@@ -157,7 +167,7 @@ const Register = () => {
             size="large"
             variant="outlined"
             color="error"
-            onClick={() => submit("cancel")}
+            onClick={submit("cancel")}
           >
             cancel
           </Button>

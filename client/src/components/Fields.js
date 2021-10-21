@@ -35,6 +35,7 @@ const PassField = ({ name = "password", value, onChange, size = "normal" }) => {
   return (
     <TextField
       fullWidth
+      required
       name={name}
       type={showPass ? "text" : "password"}
       label={name}
